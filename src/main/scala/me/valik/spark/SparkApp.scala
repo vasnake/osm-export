@@ -18,6 +18,7 @@
 package me.valik.spark
 
 import nl.grons.metrics4.scala.InstrumentedBuilder
+import org.apache.spark.sql.SparkSession
 
 /**
   * App wrapper for spark job with custom job metrics
@@ -102,8 +103,8 @@ class JobStats(name: String) {
     jsonStats += (StringUtils.uncapitalize(metrics.getClass.getSimpleName) -> metrics.asJson)
   }
 
-  def write(outputPath: String)(implicit sc: SparkContext): Unit = {
-    val fs = FileSystem.get(sc.hadoopConfiguration)
+  def write(outputPath: String)(implicit spark: SparkSession): Unit = {
+    val fs = FileSystem.get(spark.sparkContext.hadoopConfiguration)
     val os = fs.create(new Path(outputPath + "/_STATS.json"))
     try {
       os.write(toJson.getBytes("UTF-8"))

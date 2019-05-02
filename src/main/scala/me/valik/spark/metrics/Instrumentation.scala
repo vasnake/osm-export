@@ -25,6 +25,16 @@ trait Instrumentation[T] {
   def metrics(obj: T): MetricSet
 }
 
+trait RegistryInstrumentation[T] extends Instrumentation[T] {
+  def register(registry: MetricRegistry, obj: T): Unit
+
+  def metrics(obj: T): MetricSet = {
+    val registry = new MetricRegistry
+    register(registry, obj)
+    registry
+  }
+}
+
 trait DefaultInstrumentations {
   implicit def builder[T <: InstrumentedBuilder]: Instrumentation[T] = new Instrumentation[T] {
     override def metrics(obj: T): MetricSet = obj.metricRegistry

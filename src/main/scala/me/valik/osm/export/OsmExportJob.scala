@@ -18,6 +18,7 @@
 package me.valik.osm.export
 
 import me.valik.spark.SparkApp
+import io.circe.generic.auto._
 
 /**
   * spark-submit job
@@ -26,10 +27,11 @@ object OsmExportJob extends SparkApp {
 
   run {
     case args => implicit spark =>
-      //val metrics = Stuff.validate(input, config)
-      //stats.report(metrics)
-      //stats.write(path)
+      // run job
+      val metrics: JobMetrics = ???
 
-    ???
+      // promote and save job metrics
+      stats.report(metrics)
+      stats.write("/tmp/job-output")
   }
 }
