@@ -1,5 +1,5 @@
 // me.valik.osm %% osm-export % 0.1.0
-// me.valik.osm.export.SparkApp
+// me.valik.osm.export.OsmExportJob
 
 import Dependencies._
 
@@ -10,33 +10,9 @@ ThisBuild / organization     := "me.valik.osm"
 lazy val root = (project in file("."))
   .settings(
     name := "osm-export",
-    libraryDependencies += scalaTest % Test
+    libraryDependencies ++= Seq(
+      dropwizardMetrics,
+      scalaTest % Test)
+      ++ sparkDeps.map(_ % Provided)
+      ++ circeJson
   )
-
-// Uncomment the following for publishing to Sonatype.
-// See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for more detail.
-// https://www.scala-sbt.org/1.0/docs/Howto-Project-Metadata.html
-// ThisBuild / description := "Some descripiton about your project."
-// ThisBuild / licenses    := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
-// ThisBuild / homepage    := Some(url("https://github.com/example/project"))
-// ThisBuild / scmInfo := Some(
-//   ScmInfo(
-//     url("https://github.com/your-account/your-project"),
-//     "scm:git@github.com:your-account/your-project.git"
-//   )
-// )
-// ThisBuild / developers := List(
-//   Developer(
-//     id    = "Your identifier",
-//     name  = "Your Name",
-//     email = "your@email",
-//     url   = url("http://your.url")
-//   )
-// )
-// ThisBuild / pomIncludeRepository := { _ => false }
-// ThisBuild / publishTo := {
-//   val nexus = "https://oss.sonatype.org/"
-//   if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
-//   else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-// }
-// ThisBuild / publishMavenStyle := true
