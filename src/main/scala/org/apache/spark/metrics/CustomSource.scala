@@ -14,22 +14,28 @@
  *    limitations under the License.
  */
 
-// me.valik.osm.export.OsmExportJob
-package me.valik.osm.export
+// org.apache.spark.metrics.CustomSource
+package org.apache.spark.metrics
 
-import me.valik.spark.SparkApp
+import org.apache.spark.metrics.source.Source
+
+trait CustomSource extends Source
 
 /**
-  * spark-submit job
+  * register custom spark metric source
   */
-object OsmExportJob extends SparkApp {
+object CustomSource {
+  import org.apache.spark.SparkEnv
 
-  run {
-    case args => implicit spark =>
-      //val metrics = Stuff.validate(input, config)
-      //stats.report(metrics)
-      //stats.write(path)
+  /**
+    * register metric source in SparkEnv `metricSystem`
+    * @param source
+    */
+  def register(source: Source): Unit = {
+    val env = SparkEnv.get
+    if (env == null) throw new IllegalStateException(s"Can't register metrics source '${source.sourceName}'"
+      + " because SparkEnv is not set yet")
 
-    ???
+    env.metricsSystem.registerSource(source)
   }
 }
